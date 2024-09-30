@@ -101,7 +101,7 @@ body{
     background-color: lightgray;
     top: 30%;
     left: 25%;
-    display: flex;
+    display: none;
 }
 .textArea-cont{
     height: 100%;
