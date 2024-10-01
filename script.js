@@ -111,8 +111,9 @@ allPriorityColors.forEach(function(colorElem){
 const lockClosedClass= 'fa-lock'
 const lockOpenClass= 'fa-lock-open'
 
-function handleLock(){
+function handleLock(ticketElem){
     const ticketLockElem=document.querySelector('.ticket-lock')
+    const ticketTaskArea=ticketElem.querySelector('.ticket-area')
 
     ticketLockElem.addEventListener('click',function(){
 
@@ -121,9 +122,12 @@ function handleLock(){
             ticketLockElem.children[0].classList.remove(lockClosedClass)
             //2. add lock open class
             ticketLockElem.children[0].classList.add(lockOpenClass)
+            //3. now should be able to edit
+            ticketTaskArea.setAttribute('contenteditable', "true") // allow html element to be edited.
         }else{
             ticketLockElem.children[0].classList.remove(lockOpenClass)
             ticketLockElem.children[0].classList.add(lockClosedClass)
+            ticketTaskArea.setAttribute('contenteditable', "false") 
         } 
     })
 }
