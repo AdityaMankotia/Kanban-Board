@@ -23,13 +23,13 @@ addBtn.addEventListener('click',function(){
 
 //create a ticket dynamically
 
-function createTicket(ticketColor, ticketTask){
+function createTicket(ticketColor, ticketTask, ticketID){
     //create a new ticket HTML (container element)
     const ticketCont= document.createElement('div');
     ticketCont.classList.add('ticket-cont');
     ticketCont.innerHTML = `
     <div class="ticket-color" style="background-color: ${ticketColor}"></div>
-            <div class="ticket-id"></div>
+            <div class="ticket-id">${ticketID}</div>
             <div class="ticket-area">${ticketTask}</div>
             <div class="ticket-lock">
                 <i class="fa-solid fa-lock"></i>
@@ -45,9 +45,12 @@ let modalPriorityColor ='black';
 modalCont.addEventListener('keydown', function(ev){
     if(ev.key=='Shift'){
         const ticketTaskValue=textAreaCont.value;
-        createTicket(modalPriorityColor,ticketTaskValue);//pass my color, ticket description
+        //Generate random ID.
+        const ticketID= shortid();
+        createTicket(modalPriorityColor,ticketTaskValue, ticketID);//pass my color, ticket description
         modalCont.style.display='none'; //hide the model
         textAreaCont.value=''; //clear contents on close
+        
     };
     
 })
