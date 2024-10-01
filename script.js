@@ -70,6 +70,7 @@ function createTicket(ticketColor, ticketTask, ticketID){
     `;
     const mainCont=document.querySelector('.main-cont');
     mainCont.appendChild(ticketCont);
+    handleLock(ticketCont)
 }
 
 let modalPriorityColor ='black';
@@ -104,3 +105,28 @@ allPriorityColors.forEach(function(colorElem){
     
     //implementing additional logic to apply the active color to the task as well.
 })
+
+//lock functionality
+
+const lockClosedClass= 'fa-lock'
+const lockOpenClass= 'fa-lock-open'
+
+function handleLock(){
+    const ticketLockElem=document.querySelector('.ticket-lock')
+
+    ticketLockElem.addEventListener('click',function(){
+
+        if(ticketLockElem.children[0].classList.contains(lockClosedClass)){
+            //1. remove lock close class
+            ticketLockElem.children[0].classList.remove(lockClosedClass)
+            //2. add lock open class
+            ticketLockElem.children[0].classList.add(lockOpenClass)
+        }else{
+            ticketLockElem.children[0].classList.remove(lockOpenClass)
+            ticketLockElem.children[0].classList.add(lockClosedClass)
+        } 
+    })
+}
+
+
+
