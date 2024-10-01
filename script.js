@@ -4,7 +4,11 @@ const addBtn=document.querySelector('.add-btn');
 const modalCont= document.querySelector('.modal-cont');
 const textAreaCont= document.querySelector('.textArea-cont');
 
+const removeBtn = document.querySelector('.remove-btn');
+
 let addTaskFlag= false; //on page load initially, popup should not br visible
+
+let removeTaskFlag=false;
 
 addBtn.addEventListener('click',function(){
     addTaskFlag = !addTaskFlag; //toggle variable value
@@ -21,8 +25,36 @@ addBtn.addEventListener('click',function(){
     }
 })
 
-//create a ticket dynamically
+//remove tickets...
+removeBtn.addEventListener('click', function(){
+    removeTaskFlag =! removeTaskFlag; //toggle the value
 
+    const allTickets=document.querySelectorAll('.ticket-cont')
+
+    for(let i=0;i<allTickets.length;i++){
+        handleTicketRemoval(allTickets[i])
+    }
+
+    if(removeTaskFlag){
+        alert('Delete button has been activated.');
+        removeBtn.style.color ='red';
+    }else{
+        removeBtn.style.color='white';
+    }
+})
+
+
+
+function handleTicketRemoval(ticketElem){
+    ticketElem.addEventListener('click',function(){
+        if(removeTaskFlag === true){
+            ticketElem.remove();
+        }
+    })
+
+}
+
+//create a ticket dynamically
 function createTicket(ticketColor, ticketTask, ticketID){
     //create a new ticket HTML (container element)
     const ticketCont= document.createElement('div');
