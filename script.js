@@ -10,6 +10,8 @@ let addTaskFlag= false; //on page load initially, popup should not br visible
 
 let removeTaskFlag=false;
 
+const ticketArr = JSON.parse(localStorage.getItem('tickets')) || [];
+
 addBtn.addEventListener('click',function(){
     addTaskFlag = !addTaskFlag; //toggle variable value
     // if(addTaskFlag){
@@ -72,19 +74,35 @@ function createTicket(ticketColor, ticketTask, ticketID){
     mainCont.appendChild(ticketCont);
     handleLock(ticketCont)
     handleColor(ticketCont)
+
+    
+    // ticketArr.push({
+    //     ticketID:ticketID,
+    //     ticketColor:ticketColor,
+    //     ticketCont:ticketTask
+
+    // })
+    // localStorage.setItem('tickets',JSON.stringify(ticketArr))
 }
 
 let modalPriorityColor ='black';
 
 modalCont.addEventListener('keydown', function(ev){
-    if(ev.key=='Shift'){
+    if(ev.ctrlKey && ev.key==='Shift'){
         const ticketTaskValue=textAreaCont.value;
         //Generate random ID.
-        const ticketID= shortid();
+        const ticketID = Math.random().toString(36).substring(2, 9);
+        //const ticketID= shortid();
         createTicket(modalPriorityColor,ticketTaskValue, ticketID);//pass my color, ticket description
         modalCont.style.display='none'; //hide the model
         textAreaCont.value=''; //clear contents on close
+        ticketArr.push({
+                ticketID:ticketID,
+                ticketColor:modalPriorityColor,
+                taskContent:ticketTaskValue
         
+            });
+            updateLocalStorage();
     };
     
 })
@@ -113,7 +131,7 @@ const lockClosedClass= 'fa-lock'
 const lockOpenClass= 'fa-lock-open'
 
 function handleLock(ticketElem){
-    const ticketLockElem=document.querySelector('.ticket-lock')
+    const ticketLockElem = ticketElem.querySelector('.ticket-lock');
     const ticketTaskArea=ticketElem.querySelector('.ticket-area')
 
     ticketLockElem.addEventListener('click',function(){
@@ -178,3 +196,19 @@ toolBoxColors.forEach(function(colorElem){
         })
     })
 })
+
+function updateLocalStorage(){
+    //simpley to update LS
+    localStorage.setItem('tickets', JSON.stringify(ticketArr))
+}
+
+function initialise(){
+    //first step is to retrieve all tickets stored in LS
+    if(localStorage.getItem('tickets')){
+        for(let i=0;i<ticketArr.length;i++){
+            createTicket(ticketArr[i].ticketColor, ticketArr[i].taskContent,ticketArr[i].ticketID)
+        }
+    }
+}
+
+initialise()
