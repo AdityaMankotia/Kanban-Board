@@ -48,9 +48,17 @@ removeBtn.addEventListener('click', function(){
 
 
 function handleTicketRemoval(ticketElem){
+    const id=ticketElem.querySelector('.ticket-id').innerText;
     ticketElem.addEventListener('click',function(){
         if(removeTaskFlag === true){
             ticketElem.remove();
+            const ticketIdx=getTicketIndex(id);
+            //array.splice - delete/adding a particular idx
+            ticketArr.splice(ticketIdx,1);
+            updateLocalStorage();
+        }else{
+            console.log('in else condition');
+            
         }
     })
 
@@ -134,7 +142,11 @@ function handleLock(ticketElem){
     const ticketLockElem = ticketElem.querySelector('.ticket-lock');
     const ticketTaskArea=ticketElem.querySelector('.ticket-area')
 
+    const id=ticketElem.querySelector('.ticket-id').innerText;
+
     ticketLockElem.addEventListener('click',function(){
+
+        const ticketIdx=getTicketIndex(id);
 
         if(ticketLockElem.children[0].classList.contains(lockClosedClass)){
             //1. remove lock close class
@@ -148,16 +160,20 @@ function handleLock(ticketElem){
             ticketLockElem.children[0].classList.add(lockClosedClass)
             ticketTaskArea.setAttribute('contenteditable', "false") 
         } 
+        ticketArr[ticketIdx].taskContent = ticketTaskArea.innerText;
+        updateLocalStorage();
     })
 }
 
 const colors=['red','yellow','green','darkgreen']
 
 function handleColor(ticketElem){
-    const ticketColorBand=ticketElem.querySelector('.ticket-color')
+    const ticketColorBand=ticketElem.querySelector('.ticket-color');
+    const id=ticketElem.querySelector('.ticket-id').innerText;
     ticketColorBand.addEventListener('click',function(){
         //get current color of ticket
         const currentColor=ticketColorBand.style.backgroundColor;
+        const ticketIdx=getTicketIndex(id);
         //get index of that color in the color array
         //findIndex method
         const currentColorIndex= colors.findIndex(function(color){
@@ -168,6 +184,8 @@ function handleColor(ticketElem){
         const newColorIndex=(currentColorIndex + 1)%colors.length
         const newTicketColor=colors[newColorIndex]
         ticketColorBand.style.backgroundColor=newTicketColor
+        ticketArr[ticketIdx].ticketColor=newTicketColor
+        updateLocalStorage();
     })
 }
 
@@ -212,3 +230,12 @@ function initialise(){
 }
 
 initialise()
+
+function getTicketIndex(id){
+    //find the ticket obj index from Local Storage
+    //that is the ticket that needs to be updated
+    let ticketIdx=ticketArr.findIndex(function(ticketObj){
+        return ticketObj.ticketID===id;
+    })
+    return ticketIdx;
+}
